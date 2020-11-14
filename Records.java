@@ -18,6 +18,12 @@ class Records {
     }
 }
 
-record Request(String url, Map<String, String> headers) {}
+record Request(String url, Map<String, String> headers) {
+    Request {
+        if (url.indexOf(':') < 0) throw new RuntimeException("No scheme"); 
+    }
 
-record Square(char row, int col) {}
+    String scheme() {
+        return url.substring(0, url.indexOf(':'));
+    }
+}
