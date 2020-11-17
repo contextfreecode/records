@@ -1,33 +1,50 @@
-from dataclasses import dataclass
-from typing import NamedTuple
+from dataclasses import dataclass, replace
+from typing import Mapping, NamedTuple, Optional
 
 
 def main():
-    pass
+    headers = {
+        "Accept": "text/html,application/whatever",
+        "User-Agent": "ContextFreeDemo/0.0.1 (like Gecko ;)",
+    }
+    request = TimeoutRequest(url="https://rescue.org/", headers=headers)
+    print(request)
+    print(request.scheme())
+    # request.timeout_seconds = 30.0
+    # print(hash(request))
+    timeout_request = replace(request, timeout_seconds=30.0)
+    print(timeout_request)
+    # Tuple.
+    request_tuple = RequestTuple(url="https://rescue.org/", headers=headers)
+    # request_tuple = TimeoutRequestTuple(url="https://rescue.org/", headers=headers, timeout_seconds=30.0)
+    print(request_tuple)
+    print(request_tuple._replace(url="other:there"))
 
 
-@dataclass
-class Hi:
-    first: str
+@dataclass(frozen=True)
+class Request:
+    url: str
+    headers: Mapping[str, str]
+
+    def __post_init__(self):
+        assert ":" in self.url
+
+    def scheme(self):
+        return self.url[0:self.url.index(":")]
 
 
-class Hi2(NamedTuple):
-    first: str
+@dataclass(frozen=True)
+class TimeoutRequest(Request):
+    timeout_seconds: Optional[float] = None
 
 
-# a = Hi(first="Tom")
-# b = Hi("Tom")
-# print(a)
-# print(a == b)
-# print(a is b)
-# # c = {a: 1}
+class RequestTuple(NamedTuple):
+    url: str
+    headers: Mapping[str, str]
 
-# d = Hi2(first="Tom")
-# e = Hi2("Tom")
-# print(d)
-# print(d == e)
-# print(d is e)
-# f = {d: 1}
-# print(f)
+
+class TimeoutRequestTuple(RequestTuple):
+    timeout_seconds: Optional[float] = None
+
 
 main()

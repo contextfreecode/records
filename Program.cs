@@ -31,9 +31,12 @@ Console.WriteLine(JsonSerializer.Serialize(request));
 Console.WriteLine(request == timeoutRequest);
 Console.WriteLine(object.ReferenceEquals(request, timeoutRequest));
 
-record Request {
-    public string Url { get; init; } = default!;
-    public IDictionary<string, string>? Headers { get; init; } = default!;
+record Request(
+    string? Url = null,
+    IDictionary<string, string>? Headers = null
+) {
+    public string Url { get; init; } = null!;
+    public IDictionary<string, string>? Headers { get; init; } = null!;
 
     public void Validate() {
         if (!Url.Contains(':')) throw new ArgumentException("No scheme");
@@ -43,6 +46,10 @@ record Request {
     public string Scheme() => Url.Substring(0, Url.IndexOf(':'));
 }
 
-record TimeoutRequest : Request {
+record TimeoutRequest(
+    string? Url = null,
+    IDictionary<string, string>? Headers = null,
+    double? TimeoutSeconds = null
+) : Request(Url, Headers) {
     public double? TimeoutSeconds { get; set; }
 }
