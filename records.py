@@ -1,13 +1,13 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from typing import Mapping, NamedTuple, Optional
 
 
 def main():
     headers = {
-        "Accept": "text/html,application/whatever",
+        "Accept": "text/html",
         "User-Agent": "ContextFreeDemo/0.0.1 (like Gecko ;)",
     }
-    request = TimeoutRequest(url="https://rescue.org/", headers=headers)
+    request = DetailRequest(url="https://rescue.org/", headers=headers)
     print(request)
     print(request.scheme())
     # request.timeout_seconds = 30.0
@@ -15,16 +15,17 @@ def main():
     timeout_request = replace(request, timeout_seconds=30.0)
     print(timeout_request)
     # Tuple.
-    request_tuple = RequestTuple(url="https://rescue.org/", headers=headers)
-    # request_tuple = TimeoutRequestTuple(url="https://rescue.org/", headers=headers, timeout_seconds=30.0)
+    request_tuple = RequestTuple(url="https://rescue.org/")
+    # request_tuple = DetailRequestTuple(url="https://rescue.org/", headers=headers)
     print(request_tuple)
     print(request_tuple._replace(url="other:there"))
+    print(request_tuple.scheme())
 
 
 @dataclass(frozen=True)
 class Request:
     url: str
-    headers: Mapping[str, str]
+    timeout_seconds: Optional[float] = None
 
     def __post_init__(self):
         assert ":" in self.url
@@ -34,17 +35,20 @@ class Request:
 
 
 @dataclass(frozen=True)
-class TimeoutRequest(Request):
-    timeout_seconds: Optional[float] = None
+class DetailRequest(Request):
+    headers: Mapping[str, str] = field(default_factory=dict)
 
 
 class RequestTuple(NamedTuple):
     url: str
-    headers: Mapping[str, str]
-
-
-class TimeoutRequestTuple(RequestTuple):
     timeout_seconds: Optional[float] = None
+
+    def scheme(self):
+        return self.url[0:self.url.index(":")]
+
+
+class DetailRequestTuple(RequestTuple):
+    headers: Mapping[str, str]
 
 
 main()

@@ -8,7 +8,7 @@ var headers = new Dictionary<string, string>{
     {"User-Agent", "ContextFreeDemo/0.0.1 (like Gecko ;)"},
 // }.ToImmutableDictionary();
 };
-var request = new TimeoutRequest {
+var request = new DetailRequest {
     Url = "https://rescue.org/",
     Headers = headers,
 };
@@ -20,23 +20,23 @@ headers["User-Agent"] = "Mozilla/5.0";
 Console.WriteLine(request.GetHashCode());
 Console.WriteLine(JsonSerializer.Serialize(request));
 // Create new record.
-var timeoutRequest = request with { TimeoutSeconds = 30.0 };
-Console.WriteLine(timeoutRequest.GetHashCode());
-Console.WriteLine(JsonSerializer.Serialize(timeoutRequest));
-Console.WriteLine(request == timeoutRequest);
+var DetailRequest = request with { TimeoutSeconds = 30.0 };
+Console.WriteLine(DetailRequest.GetHashCode());
+Console.WriteLine(JsonSerializer.Serialize(DetailRequest));
+Console.WriteLine(request == DetailRequest);
 // Change existing record.
 request.TimeoutSeconds = 30.0;
 Console.WriteLine(request.GetHashCode());
 Console.WriteLine(JsonSerializer.Serialize(request));
-Console.WriteLine(request == timeoutRequest);
-Console.WriteLine(object.ReferenceEquals(request, timeoutRequest));
+Console.WriteLine(request == DetailRequest);
+Console.WriteLine(object.ReferenceEquals(request, DetailRequest));
 
 record Request(
     string? Url = null,
-    IDictionary<string, string>? Headers = null
+    double? TimeoutSeconds = null
 ) {
     public string Url { get; init; } = null!;
-    public IDictionary<string, string>? Headers { get; init; } = null!;
+    public double? TimeoutSeconds { get; set; }
 
     public void Validate() {
         if (!Url.Contains(':')) throw new ArgumentException("No scheme");
@@ -46,10 +46,10 @@ record Request(
     public string Scheme() => Url.Substring(0, Url.IndexOf(':'));
 }
 
-record TimeoutRequest(
+record DetailRequest(
     string? Url = null,
-    IDictionary<string, string>? Headers = null,
-    double? TimeoutSeconds = null
-) : Request(Url, Headers) {
-    public double? TimeoutSeconds { get; set; }
+    double? TimeoutSeconds = null,
+    IDictionary<string, string>? Headers = null
+) : Request(Url, TimeoutSeconds) {
+    public IDictionary<string, string>? Headers { get; init; } = null!;
 }
