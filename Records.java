@@ -1,6 +1,7 @@
 // java --enable-preview --source 15 Records.java
 
 import java.util.*;
+import static java.lang.System.out;
 import static java.util.Map.entry;
 
 class Records {
@@ -13,12 +14,12 @@ class Records {
             new Request("https://rescue.org/"),
             headers
         );
-        System.out.println(request.hashCode());
-        System.out.println(request);
+        out.println(request.hashCode());
+        out.println(request);
         headers.put("User-Agent", "Mozilla/5.0");
-        System.out.println(request.hashCode());
-        System.out.println(request);
-        System.out.println(DetailRequest.class.getSuperclass());
+        out.println(request.hashCode());
+        out.println(request);
+        out.println(DetailRequest.class.getSuperclass());
     }
 }
 
