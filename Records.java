@@ -18,6 +18,7 @@ class Records {
         headers.put("User-Agent", "Mozilla/5.0");
         System.out.println(request.hashCode());
         System.out.println(request);
+        System.out.println(DetailRequest.class.getSuperclass());
     }
 }
 

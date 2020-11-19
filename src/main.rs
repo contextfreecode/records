@@ -1,18 +1,18 @@
-#[derive(Clone, Debug)]
-struct Request {
-    url: String,
-    timeout_seconds: Option<f64>,
+#[derive(Debug)]
+struct Request<'a> {
+    url: &'a str,
+    timeout_seconds: Option<f64>,  // No Hash
 }
 
 fn main() {
     let request = Request {
-        url: "https://rescue.org/".into(),
+        url: "https://rescue.org/",
         timeout_seconds: None,
     };
     dbg!(&request);
     let timeout_request = Request {
         timeout_seconds: Some(30.0),
-        ..request.clone()
+        ..request
     };
     dbg!(&timeout_request);
 }
