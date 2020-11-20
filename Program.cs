@@ -53,7 +53,11 @@ using static System.Console;
 // WriteLine(typeof(Request).BaseType);
 // WriteLine(new RequestStruct { Url = "https://rescue.org/" });
 
-var alice = new Employee { Name = "Alice", HireDate = new (2000, 1, 1) };
+var alice = new Employee {
+    Name = "Alice",
+    HireDate = new (2000, 1, 1),
+    // HireDate = new DateTime(2000, 1, 1),
+};
 // var alice = new Employee { Name = "Alice", HireYear = 2000 };
 alice.Validate();
 // new Employee().Validate();
@@ -71,21 +75,29 @@ var e = new Box<DateTime>(new (2000, 1, 1));
 record Box<ValueType>(ValueType Value) where ValueType : struct {
     public static implicit operator Box<ValueType>(ValueType Value)
         => new Box<ValueType>(Value);
+
+    public override string ToString() => Value.ToString()!;
 }
 
 // record Employee(string Name, DateTime HireDate);
-record Employee (string? Name = default, DateTime HireDate = default) {
-    public string Name { get; init; } = null!;
+record Employee (
+    string? Name = default,
+    DateTime HireDate = default
+    // Box<DateTime>? HireDate = default
+) {
+    public string Name { get; init; } = Name!;
     public DateTime HireDate { get; init; }
+    // public Box<DateTime> HireDate { get; init; } = HireDate!;
 
     public void Validate() {
         if (Name is null) throw new ArgumentException("Name missing");
-        if (HireDate.Ticks == 0) {
+        if (HireDate == default) {
             throw new ArgumentException("HireDate missing");
         }
     }
 
     public int YearsEmployed() => DateTime.Now.Year - HireDate.Year;
+    // public int YearsEmployed() => DateTime.Now.Year - HireDate.Value.Year;
 }
 
 // record DetailRequest(
