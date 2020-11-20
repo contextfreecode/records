@@ -64,7 +64,9 @@ WriteLine(alice.YearsEmployed());
 // string a = null!;
 // DateTime? b = (DateTime)(null as DateTime?)!;
 Box<DateTime> b = DateTime.Now;
-Box<DateTime> c = new (new (2000, 1, 1));
+Box<DateTime> c = new DateTime(2000, 1, 1);
+Box<DateTime> d = new (new (2000, 1, 1));
+var e = new Box<DateTime>(new (2000, 1, 1));
 
 record Box<ValueType>(ValueType Value) where ValueType : struct {
     public static implicit operator Box<ValueType>(ValueType Value)
@@ -72,25 +74,17 @@ record Box<ValueType>(ValueType Value) where ValueType : struct {
 }
 
 // record Employee(string Name, DateTime HireDate);
-record Employee
-// (
-//     string? Name = null,
-//     DateTime? HireDate = null
-// )
-{
+record Employee (string? Name = default, DateTime HireDate = default) {
     public string Name { get; init; } = null!;
-    public int HireYear { get; init; }
     public DateTime HireDate { get; init; }
 
     public void Validate() {
         if (Name is null) throw new ArgumentException("Name missing");
-        // if (HireYear == 0) throw new ArgumentException("HireYear missing");
         if (HireDate.Ticks == 0) {
             throw new ArgumentException("HireDate missing");
         }
     }
 
-    // public int YearsEmployed() => DateTime.Now.Year - HireYear;
     public int YearsEmployed() => DateTime.Now.Year - HireDate.Year;
 }
 
