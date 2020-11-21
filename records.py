@@ -1,54 +1,55 @@
 from dataclasses import dataclass, field, replace
+from datetime import date
 from typing import Mapping, NamedTuple, Optional
 
 
+# TODO(@tjp): Update. Try positional!
+
+
 def main():
-    headers = {
-        "Accept": "text/html",
-        "User-Agent": "ContextFreeDemo/0.0.1 (like Gecko ;)",
-    }
-    request = DetailRequest(url="https://rescue.org/", headers=headers)
-    print(request)
-    print(request.scheme())
-    # request.timeout_seconds = 30.0
-    # print(hash(request))
-    timeout_request = replace(request, timeout_seconds=30.0)
-    print(timeout_request)
-    # Tuple.
-    request_tuple = RequestTuple(url="https://rescue.org/")
-    # request_tuple = DetailRequestTuple(url="https://rescue.org/", headers=headers)
-    print(request_tuple)
-    print(request_tuple._replace(url="other:there"))
-    print(request_tuple.scheme())
+    # alice = Employee("Alice", date(2000, 1, 1))
+    alice = Employee(name="Alice", hire_date=date(2000, 1, 1))
+    print(alice)
+    alice2 = replace(alice, hire_date=date(2010, 1, 1))
+    print(alice2)
+    alice3 = replace(alice2, hire_date=alice.hire_date)
+    print(alice3)
+    print(hash(alice))
+    print(hash(alice2))
+    print(hash(alice3))
+    print(alice == alice2)
+    print(alice == alice3)
+    print(alice < alice2)
 
 
-@dataclass(frozen=True)
-class Request:
-    url: str
-    timeout_seconds: Optional[float] = None
+@dataclass(frozen=True, order=True)
+class Employee:
+    name: str
+    hire_date: date
 
     def __post_init__(self):
-        assert ":" in self.url
+        assert self.name is not None
+        assert self.hire_date is not None
 
-    def scheme(self):
-        return self.url[0:self.url.index(":")]
-
-
-@dataclass(frozen=True)
-class DetailRequest(Request):
-    headers: Mapping[str, str] = field(default_factory=dict)
+    def years_employed(self):
+        return date.today().year - self.hire_date.year
 
 
-class RequestTuple(NamedTuple):
-    url: str
-    timeout_seconds: Optional[float] = None
-
-    def scheme(self):
-        return self.url[0:self.url.index(":")]
+# @dataclass(frozen=True)
+# class DetailRequest(Request):
+#     headers: Mapping[str, str] = field(default_factory=dict)
 
 
-class DetailRequestTuple(RequestTuple):
-    headers: Mapping[str, str]
+# class RequestTuple(NamedTuple):
+#     url: str
+#     timeout_seconds: Optional[float] = None
+
+#     def scheme(self):
+#         return self.url[0:self.url.index(":")]
+
+
+# class DetailRequestTuple(RequestTuple):
+#     headers: Mapping[str, str]
 
 
 main()

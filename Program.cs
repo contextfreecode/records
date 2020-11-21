@@ -53,6 +53,13 @@ using static System.Console;
 // WriteLine(typeof(Request).BaseType);
 // WriteLine(new RequestStruct { Url = "https://rescue.org/" });
 
+// // string a = null!;
+// // DateTime? b = (DateTime)(null as DateTime?)!;
+// Box<DateTime> b = DateTime.Now;
+// Box<DateTime> c = new DateTime(2000, 1, 1);
+// Box<DateTime> d = new (new (2000, 1, 1));
+// var e = new Box<DateTime>(new (2000, 1, 1));
+
 var alice = new Employee {
     Name = "Alice",
     HireDate = new (2000, 1, 1),
@@ -64,20 +71,16 @@ alice.Validate();
 // var alice = new Employee("alice", new (2000, 1, 1));
 WriteLine(alice);
 WriteLine(alice.YearsEmployed());
+WriteLine(alice.GetHashCode());
 
-// string a = null!;
-// DateTime? b = (DateTime)(null as DateTime?)!;
-Box<DateTime> b = DateTime.Now;
-Box<DateTime> c = new DateTime(2000, 1, 1);
-Box<DateTime> d = new (new (2000, 1, 1));
-var e = new Box<DateTime>(new (2000, 1, 1));
+var alice2 = alice with { HireDate = new (2010, 1, 1) };
+var alice3 = alice2 with { HireDate = alice.HireDate };
+WriteLine(alice2.GetHashCode());
+WriteLine(alice3.GetHashCode());
 
-record Box<ValueType>(ValueType Value) where ValueType : struct {
-    public static implicit operator Box<ValueType>(ValueType Value)
-        => new Box<ValueType>(Value);
-
-    public override string ToString() => Value.ToString()!;
-}
+WriteLine(alice == alice2);
+// WriteLine(alice < alice2);
+WriteLine(alice == alice3);
 
 // record Employee(string Name, DateTime HireDate);
 record Employee(
@@ -106,4 +109,11 @@ record DetailEmployee(
     IDictionary<string, string>? Detail = null
 ) : Employee(Name, HireDate) {
     public IDictionary<string, string>? Headers { get; init; } = Detail!;
+}
+
+record Box<ValueType>(ValueType Value) where ValueType : struct {
+    public static implicit operator Box<ValueType>(ValueType Value)
+        => new Box<ValueType>(Value);
+
+    public override string ToString() => Value.ToString()!;
 }
