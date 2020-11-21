@@ -1,18 +1,27 @@
-#[derive(Debug)]
-struct Request<'a> {
-    url: &'a str,
-    timeout_seconds: Option<f64>,  // No Hash
-}
+use chrono::prelude::*;
 
 fn main() {
-    let request = Request {
-        url: "https://rescue.org/",
-        timeout_seconds: None,
+    let alice = Employee {
+        name: "Alice",
+        hire_date: Utc.ymd(2000, 1, 1),
     };
-    dbg!(&request);
-    let timeout_request = Request {
-        timeout_seconds: Some(30.0),
-        ..request
-    };
-    dbg!(&timeout_request);
+    dbg!(&alice);
+    dbg!(alice.years_employed());
+    // let other_alice = Employee {
+    //     hire_year: 2010,
+    //     ..alice
+    // };
+    // dbg!(&other_alice);
+}
+
+#[derive(Debug)]
+struct Employee<'a> {
+    name: &'a str,
+    hire_date: Date<Utc>,
+}
+
+impl<'a> Employee<'a> {
+    fn years_employed(&self) -> i32 {
+        Utc::today().year() - self.hire_date.year()
+    }
 }

@@ -80,13 +80,13 @@ record Box<ValueType>(ValueType Value) where ValueType : struct {
 }
 
 // record Employee(string Name, DateTime HireDate);
-record Employee (
+record Employee(
     string? Name = default,
     DateTime HireDate = default
     // Box<DateTime>? HireDate = default
 ) {
     public string Name { get; init; } = Name!;
-    public DateTime HireDate { get; init; }
+    public DateTime HireDate { get; init; } = HireDate;
     // public Box<DateTime> HireDate { get; init; } = HireDate!;
 
     public void Validate() {
@@ -100,27 +100,10 @@ record Employee (
     // public int YearsEmployed() => DateTime.Now.Year - HireDate.Value.Year;
 }
 
-// record DetailRequest(
-//     string? Url = null,
-//     double? TimeoutSeconds = null,
-//     IDictionary<string, string>? Headers = null
-// ) : Request(Url, TimeoutSeconds) {
-//     public IDictionary<string, string>? Headers { get; init; } = Headers!;
-// }
-
-// struct RequestStruct {
-//     public string Url { get; set; }
-//     public double? TimeoutSeconds { get; init; }
-
-//     public void Validate() {
-//         if (!Url.Contains(':')) throw new ArgumentException("No scheme");
-//         // WriteLine(request);
-//     }
-
-//     public string Scheme() => Url.Substring(0, Url.IndexOf(':'));
-// }
-
-// record Square {
-//     public char Row { get; init; }
-//     public int Col { get; init; }
-// }
+record DetailEmployee(
+    string? Name = default,
+    DateTime HireDate = default,
+    IDictionary<string, string>? Detail = null
+) : Employee(Name, HireDate) {
+    public IDictionary<string, string>? Headers { get; init; } = Detail!;
+}
