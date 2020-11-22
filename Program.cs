@@ -5,70 +5,33 @@ using System.Text.Json;
 using static System.Console;
 
 #pragma warning disable CS0162, CS8321
-// void LoadTest() {
-//     var count = 100000000;
-//     if (true) {
-//         var structs = new RequestStruct[count];
-//         for (int i = 0; i < structs.Length; i += 1) {
-//             structs[i].Url = "https://rescue.org/";
-//         }
-//     } else {
-//         var records = new Request[count];
-//         for (int i = 0; i < records.Length; i += 1) {
-//             records[i] = new Request { TimeoutSeconds = 30.0 };
-//         }
-//     }
-//     Console.ReadLine();
-// }
+void LoadTest() {
+    var count = 100000000;
+    if (false) {
+        var structs = new EmployeeStruct[count];
+        for (int i = 0; i < structs.Length; i += 1) {
+            structs[i] = new EmployeeStruct { Name = "Bob" };
+        }
+    } else {
+        var records = new Employee[count];
+        for (int i = 0; i < records.Length; i += 1) {
+            records[i] = new Employee { Name = "Bob" };
+        }
+    }
+    WriteLine("Done!");
+    ReadLine();
+}
 #pragma warning restore CS0162, CS8321
 
-// var headers = new Dictionary<string, string>{
-//     {"Accept", "text/html,application/whatever"},
-//     {"User-Agent", "ContextFreeDemo/0.0.1 (like Gecko ;)"},
-// // }.ToImmutableDictionary();
-// };
-// var request = new DetailRequest {
-//     Url = "https://rescue.org/",
-//     Headers = headers,
-// };
-// request.Validate();
-// WriteLine(request.GetHashCode());
-// WriteLine(JsonSerializer.Serialize(request));
-// // Change headers.
-// headers["User-Agent"] = "Mozilla/5.0";
-// WriteLine(request.GetHashCode());
-// WriteLine(JsonSerializer.Serialize(request));
-// // Create new record.
-// var timeoutRequest = request with { TimeoutSeconds = 30.0 };
-// WriteLine(timeoutRequest.GetHashCode());
-// WriteLine(JsonSerializer.Serialize(timeoutRequest));
-// WriteLine(request == timeoutRequest);
-// // Change existing record.
-// request.TimeoutSeconds = 30.0;
-// WriteLine(request.GetHashCode());
-// WriteLine(JsonSerializer.Serialize(request));
-// WriteLine(request == timeoutRequest);
-// WriteLine(object.ReferenceEquals(request, timeoutRequest));
+// LoadTest();
 
-// WriteLine(typeof(Request).BaseType);
-// WriteLine(new RequestStruct { Url = "https://rescue.org/" });
-
-// // string a = null!;
-// // DateTime? b = (DateTime)(null as DateTime?)!;
-// Box<DateTime> b = DateTime.Now;
-// Box<DateTime> c = new DateTime(2000, 1, 1);
-// Box<DateTime> d = new (new (2000, 1, 1));
-// var e = new Box<DateTime>(new (2000, 1, 1));
-
+// var alice = new Employee("alice", new (2000, 1, 1));
 var alice = new Employee {
     Name = "Alice",
     HireDate = new (2000, 1, 1),
     // HireDate = new DateTime(2000, 1, 1),
 };
-// var alice = new Employee { Name = "Alice", HireYear = 2000 };
 alice.Validate();
-// new Employee().Validate();
-// var alice = new Employee("alice", new (2000, 1, 1));
 WriteLine(alice);
 WriteLine(alice.YearsEmployed());
 WriteLine(alice.GetHashCode());
@@ -81,6 +44,17 @@ WriteLine(alice3.GetHashCode());
 WriteLine(alice == alice2);
 // WriteLine(alice < alice2);
 WriteLine(alice == alice3);
+
+var detail = new Dictionary<string, string> {
+    {"food", "apple"}
+}.ToImmutableDictionary();
+var detail2 = detail.SetItem("food", "avocado");
+var detail3 = detail2.SetItem("food", "apple");
+WriteLine(detail.GetHashCode());
+WriteLine(detail2.GetHashCode());
+WriteLine(detail3.GetHashCode());
+WriteLine(detail == detail2);
+WriteLine(detail == detail3);
 
 // record Employee(string Name, DateTime HireDate);
 record Employee(
@@ -106,9 +80,15 @@ record Employee(
 record DetailEmployee(
     string? Name = default,
     DateTime HireDate = default,
-    IDictionary<string, string>? Detail = null
+    IReadOnlyDictionary<string, string>? Detail = default
 ) : Employee(Name, HireDate) {
-    public IDictionary<string, string>? Headers { get; init; } = Detail!;
+    public IReadOnlyDictionary<string, string>? Headers { get; init; } =
+        Detail ?? ImmutableDictionary.Create<string, string>();
+}
+
+struct EmployeeStruct {
+    public string Name { get; set; }
+    public DateTime HireDate { get; set; }
 }
 
 record Box<ValueType>(ValueType Value) where ValueType : struct {
