@@ -45,16 +45,18 @@ WriteLine(alice == alice2);
 // WriteLine(alice < alice2);
 WriteLine(alice == alice3);
 
-var detail = new Dictionary<string, string> {
-    {"food", "apple"}
+var favorites = new Dictionary<string, string> {
+    {"color", "blue"},
+    {"food", "apple"},
 }.ToImmutableDictionary();
-var detail2 = detail.SetItem("food", "avocado");
-var detail3 = detail2.SetItem("food", "apple");
-WriteLine(detail.GetHashCode());
-WriteLine(detail2.GetHashCode());
-WriteLine(detail3.GetHashCode());
-WriteLine(detail == detail2);
-WriteLine(detail == detail3);
+var favorites2 = favorites.SetItem("food", "avocado");
+var favorites3 = favorites2.SetItem("food", "apple");
+WriteLine(favorites.GetHashCode());
+WriteLine(favorites2.GetHashCode());
+WriteLine(favorites3.GetHashCode());
+WriteLine(favorites == favorites2);
+WriteLine(favorites == favorites3);
+// WriteLine(favorites < favorites2);
 
 // record Employee(string Name, DateTime HireDate);
 record Employee(
@@ -80,10 +82,10 @@ record Employee(
 record DetailEmployee(
     string? Name = default,
     DateTime HireDate = default,
-    IReadOnlyDictionary<string, string>? Detail = default
+    IReadOnlyDictionary<string, string>? favorites = default
 ) : Employee(Name, HireDate) {
     public IReadOnlyDictionary<string, string>? Headers { get; init; } =
-        Detail ?? ImmutableDictionary.Create<string, string>();
+        favorites ?? ImmutableDictionary.Create<string, string>();
 }
 
 struct EmployeeStruct {

@@ -16,30 +16,30 @@ class Records {
         out.println(alice3.hashCode());
         out.println(alice.equals(alice2));
         out.println(alice.equals(alice3));
-        // var detail = new HashMap<>(Map.ofEntries(
+        // var favorites = new HashMap<>(Map.ofEntries(
         //     entry("Accept", "text/html"),
         //     entry("User-Agent", "ContextFreeDemo/0.0.1 (like Gecko ;)")
         // ));
-        // var request = new DetailRequest(
+        // var request = new favoritesRequest(
         //     new Request("https://rescue.org/"),
-        //     detail
+        //     favorites
         // );
         // out.println(request.hashCode());
         // out.println(request);
-        // detail.put("User-Agent", "Mozilla/5.0");
+        // favorites.put("User-Agent", "Mozilla/5.0");
         // out.println(request.hashCode());
         // out.println(request);
-        // out.println(DetailRequest.class.getSuperclass());
+        // out.println(favoritesRequest.class.getSuperclass());
     }
 }
 
 // Remember: https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/time/LocalDate.html#withYear(int)
 
-record Employee(String name, LocalDate hireDate, Map<String, String> detail) {
+record Employee(String name, LocalDate hireDate, Map<String, String> favorites) {
     Employee {
         if (name == null) throw new RuntimeException("No name"); 
         if (hireDate == null) throw new RuntimeException("No hireDate"); 
-        if (detail == null) detail = Collections.emptyMap();
+        if (favorites == null) favorites = Collections.emptyMap();
     }
 
     Employee(String name, LocalDate hireDate) {
@@ -51,4 +51,4 @@ record Employee(String name, LocalDate hireDate, Map<String, String> detail) {
     }
 }
 
-record DetailEmployee(Employee employee, Map<String, String> detail) {}
+record DetailEmployee(Employee employee, Map<String, String> favorites) {}

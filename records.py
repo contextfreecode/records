@@ -20,6 +20,15 @@ def main():
     print(alice == alice2)
     print(alice == alice3)
     print(alice < alice2)
+    favorites = {"color": "yellow", "food": "apple"}
+    favorites2 = {**favorites, "food": "avocado"}
+    favorites3 = {**favorites2, "food": favorites["food"]}
+    print(favorites)
+    print(favorites2)
+    print(favorites == favorites2)
+    print(favorites == favorites3)
+    # print(favorites < favorites2)
+    # print(hash(favorites))
 
 
 @dataclass(frozen=True, order=True)
@@ -35,21 +44,21 @@ class Employee:
         return date.today().year - self.hire_date.year
 
 
-# @dataclass(frozen=True)
-# class DetailRequest(Request):
-#     headers: Mapping[str, str] = field(default_factory=dict)
+@dataclass(frozen=True, order=True)
+class DetailEmployee(Employee):
+    favorites: Mapping[str, str] = field(default_factory=dict)
 
 
-# class RequestTuple(NamedTuple):
-#     url: str
-#     timeout_seconds: Optional[float] = None
+class EmployeeTuple(NamedTuple):
+    url: str
+    timeout_seconds: Optional[float] = None
 
-#     def scheme(self):
-#         return self.url[0:self.url.index(":")]
+    def scheme(self):
+        return self.url[0:self.url.index(":")]
 
 
-# class DetailRequestTuple(RequestTuple):
-#     headers: Mapping[str, str]
+class DetailEmployeeTuple(EmployeeTuple):
+    favorites: Mapping[str, str]
 
 
 main()

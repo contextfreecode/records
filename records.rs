@@ -30,35 +30,35 @@ fn main() {
     bob.name = "Bob";
     dbg!(bob);
     // Hash
-    let detail = hashmap! {"food" => "apple"};
-    let detail2 = detail.update("food", "avocado");
-    let detail3 = detail.update("food", "apple");
-    dbg!(&detail);
-    dbg!(&detail2);
-    dbg!(hash_calc(&detail));
-    dbg!(hash_calc(&detail2));
-    dbg!(hash_calc(&detail3));
-    dbg!(detail == detail2);
-    dbg!(detail == detail3);
-    dbg!(detail < detail2);
-    dbg!(hash_calc(&EmployeeDetail {
+    let favorites = hashmap! {"color" => "yellow", "food" => "apple"};
+    let favorites2 = favorites.update("food", "avocado");
+    let favorites3 = favorites.update("food", "apple");
+    dbg!(&favorites);
+    dbg!(&favorites2);
+    dbg!(hash_calc(&favorites));
+    dbg!(hash_calc(&favorites2));
+    dbg!(hash_calc(&favorites3));
+    dbg!(favorites == favorites2);
+    dbg!(favorites == favorites3);
+    dbg!(favorites < favorites2);
+    dbg!(hash_calc(&DetailEmployee {
         employee: alice,
-        detail,
+        favorites,
     }));
-    dbg!(hash_calc(&EmployeeDetail {
+    dbg!(hash_calc(&DetailEmployee {
         employee: alice,
-        detail: detail2,
+        favorites: favorites2,
     }));
-    dbg!(hash_calc(&EmployeeDetail {
+    dbg!(hash_calc(&DetailEmployee {
         employee: alice,
-        detail: detail3,
+        favorites: favorites3,
     }));
-    // let detail2 = {
-    //     let mut clone = detail.clone();
+    // let favorites2 = {
+    //     let mut clone = favorites.clone();
     //     clone.insert("food", "avocado");
     //     clone
     // };
-    // dbg!(&detail2);
+    // dbg!(&favorites2);
 }
 
 // #[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -77,9 +77,9 @@ impl<'a> Employee<'a> {
 }
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct EmployeeDetail<'a> {
+struct DetailEmployee<'a> {
     employee: Employee<'a>,
-    detail: HashMap<&'a str, &'a str>,
+    favorites: HashMap<&'a str, &'a str>,
 }
 
 fn hash_calc<Hashable: Hash>(hashable: &Hashable) -> u64 {
