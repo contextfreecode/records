@@ -1,6 +1,6 @@
 use chrono::prelude::*;
-use im::*;
 use std::collections::hash_map::DefaultHasher;
+use std::collections::BTreeMap;
 use std::hash::*;
 
 fn main() {
@@ -29,10 +29,25 @@ fn main() {
     let mut bob = Employee { ..alice3 };
     bob.name = "Bob";
     dbg!(bob);
-    // Hash
-    let favorites = hashmap! {"color" => "yellow", "food" => "apple"};
-    let favorites2 = favorites.update("food", "avocado");
-    let favorites3 = favorites.update("food", "apple");
+    // Hash core
+    let favorites: BTreeMap<&str, &str> =
+        vec![("food", "apple"), ("color", "aqua")]
+        .into_iter()
+        .collect();
+    let favorites2 = {
+        let mut result = favorites.clone();
+        result.insert("food", "avocado");
+        result
+    };
+    let favorites3: BTreeMap<&str, &str> = favorites
+        .clone()
+        .into_iter()
+        .chain(vec![("food", favorites["food"])])
+        .collect();
+    // Using crate `im`
+    // let favorites = hashmap! {"color" => "aqua", "food" => "apple"};
+    // let favorites2 = favorites.update("food", "avocado");
+    // let favorites3 = favorites.update("food", "apple");
     dbg!(&favorites);
     dbg!(&favorites2);
     dbg!(hash_calc(&favorites));
@@ -53,12 +68,6 @@ fn main() {
         employee: alice,
         favorites: favorites3,
     }));
-    // let favorites2 = {
-    //     let mut clone = favorites.clone();
-    //     clone.insert("food", "avocado");
-    //     clone
-    // };
-    // dbg!(&favorites2);
 }
 
 // #[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -79,7 +88,7 @@ impl<'a> Employee<'a> {
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 struct DetailEmployee<'a> {
     employee: Employee<'a>,
-    favorites: HashMap<&'a str, &'a str>,
+    favorites: BTreeMap<&'a str, &'a str>,
 }
 
 fn hash_calc<Hashable: Hash>(hashable: &Hashable) -> u64 {

@@ -20,7 +20,7 @@ def main():
     print(alice == alice2)
     print(alice == alice3)
     print(alice < alice2)
-    favorites = {"color": "yellow", "food": "apple"}
+    favorites = {"color": "aqua", "food": "apple"}
     favorites2 = {**favorites, "food": "avocado"}
     favorites3 = {**favorites2, "food": favorites["food"]}
     print(favorites)

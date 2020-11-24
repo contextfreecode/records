@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text.Json;
+// using System.Text.Json;
 using static System.Console;
 
 #pragma warning disable CS0162, CS8321
@@ -21,42 +21,53 @@ void LoadTest() {
     WriteLine("Done!");
     ReadLine();
 }
+
+void ExploreMaps() {
+    var favorites = new Dictionary<string, string> {
+        {"color", "aqua"},
+        {"food", "apple"},
+    }.ToImmutableDictionary();
+    var favorites2 = favorites.SetItem("food", "avocado");
+    var favorites3 = favorites2.SetItem("food", "apple");
+    WriteLine(favorites.GetHashCode());
+    WriteLine(favorites2.GetHashCode());
+    WriteLine(favorites3.GetHashCode());
+    WriteLine(favorites == favorites2);
+    WriteLine(favorites == favorites3);
+    // WriteLine(favorites < favorites2);
+}
+
+void ExploreRecords() {
+    // var alice = new Employee("alice", new (2000, 1, 1));
+    var alice = new Employee {
+        Name = "Alice",
+        HireDate = new (2000, 1, 1),
+        // HireDate = new DateTime(2000, 1, 1),
+    };
+    alice.Validate();
+    WriteLine(alice);
+    WriteLine(alice.YearsEmployed());
+    WriteLine(alice.GetHashCode());
+
+    var alice2 = alice with { HireDate = new (2010, 1, 1) };
+    var alice3 = alice2 with { HireDate = alice.HireDate };
+    WriteLine(alice2.GetHashCode());
+    WriteLine(alice3.GetHashCode());
+
+    WriteLine(alice == alice2);
+    // WriteLine(alice < alice2);
+    WriteLine(alice == alice3);
+
+    var greetings = new Dictionary<Employee, String> {
+        {alice, "Hi!"},
+    }.ToImmutableDictionary();
+    WriteLine(greetings[alice3]);
+}
 #pragma warning restore CS0162, CS8321
 
+ExploreRecords();
+// ExploreMaps();
 // LoadTest();
-
-// var alice = new Employee("alice", new (2000, 1, 1));
-var alice = new Employee {
-    Name = "Alice",
-    HireDate = new (2000, 1, 1),
-    // HireDate = new DateTime(2000, 1, 1),
-};
-alice.Validate();
-WriteLine(alice);
-WriteLine(alice.YearsEmployed());
-WriteLine(alice.GetHashCode());
-
-var alice2 = alice with { HireDate = new (2010, 1, 1) };
-var alice3 = alice2 with { HireDate = alice.HireDate };
-WriteLine(alice2.GetHashCode());
-WriteLine(alice3.GetHashCode());
-
-WriteLine(alice == alice2);
-// WriteLine(alice < alice2);
-WriteLine(alice == alice3);
-
-var favorites = new Dictionary<string, string> {
-    {"color", "blue"},
-    {"food", "apple"},
-}.ToImmutableDictionary();
-var favorites2 = favorites.SetItem("food", "avocado");
-var favorites3 = favorites2.SetItem("food", "apple");
-WriteLine(favorites.GetHashCode());
-WriteLine(favorites2.GetHashCode());
-WriteLine(favorites3.GetHashCode());
-WriteLine(favorites == favorites2);
-WriteLine(favorites == favorites3);
-// WriteLine(favorites < favorites2);
 
 // record Employee(string Name, DateTime HireDate);
 record Employee(
