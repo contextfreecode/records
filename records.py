@@ -22,7 +22,7 @@ def main():
     print(alice < alice2)
     favorites = {"color": "aqua", "food": "apple"}
     favorites2 = {**favorites, "food": "avocado"}
-    favorites3 = {**favorites2, "food": favorites["food"]}
+    favorites3 = favorites2 | {"food": favorites["food"]}
     print(favorites)
     print(favorites2)
     print(favorites == favorites2)
