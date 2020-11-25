@@ -26,28 +26,28 @@ void ExploreRecords() {
     var alice = new Employee {
         Name = "Alice",
         HireDate = new (2000, 1, 1),
-        // HireDate = new DateTime(2000, 1, 1),
     };
-    // alice.Validate();
+    alice.Validate();
     // alice.Name = "Betty";
     WriteLine(alice);
     WriteLine(alice.YearsEmployed());
-    WriteLine(alice.GetHashCode());
     // WriteLine(typeof(Employee).BaseType);
 
     var alice2 = alice with { HireDate = new (2010, 1, 1) };
     var alice3 = alice2 with { HireDate = alice.HireDate };
+
+    WriteLine(alice.GetHashCode());
     WriteLine(alice2.GetHashCode());
     WriteLine(alice3.GetHashCode());
 
     WriteLine(alice == alice2);
-    // WriteLine(alice < alice2);
     WriteLine(alice == alice3);
+    // WriteLine(alice < alice2);
 
-    var greetings = new Dictionary<Employee, String> {
-        {alice, "Hi!"},
-    };
-    WriteLine(greetings[alice3]);
+    // var greetings = new Dictionary<Employee, String> {
+    //     {alice, "Hi!"},
+    // };
+    // WriteLine(greetings[alice3]);
 }
 #pragma warning restore CS0162, CS8321
 
@@ -60,7 +60,7 @@ record Employee(
     DateTime HireDate = default
     // Box<DateTime>? HireDate = default
 ) {
-    // public string Name { get; init; } = Name!;
+    // public string Name { get; init; }  // = Name!;
     // public DateTime HireDate { get; init; } = HireDate;
     // // public Box<DateTime> HireDate { get; init; } = HireDate!;
 

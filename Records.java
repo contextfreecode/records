@@ -16,13 +16,20 @@ class Records {
             alice.name(), alice.hireDate().withYear(2010)
         );
         var alice3 = new Employee(alice2.name(), alice.hireDate());
+
         out.println(alice);
+        out.println(alice2);
+        out.println(alice3);
+
         out.println(alice.hashCode());
         out.println(alice2.hashCode());
         out.println(alice3.hashCode());
+
         out.println(alice.equals(alice2));
         out.println(alice.equals(alice3));
-        out.println(Employee.class.getSuperclass());
+        // out.println(alice.compareTo(alice2));
+
+        // out.println(Employee.class.getSuperclass());
     }
 }
 

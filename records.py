@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field, replace
 from datetime import date
-from typing import Mapping, NamedTuple, Optional
+from typing import Mapping, NamedTuple, Optional, TypedDict
 
 
 def main():
@@ -8,6 +8,10 @@ def main():
     alice = Employee(name="Alice", hire_date=date(2000, 1, 1))
     alice2 = replace(alice, hire_date=date(2010, 1, 1))
     alice3 = replace(alice2, hire_date=alice.hire_date)
+    # alice2 = alice._replace(hire_date=date(2010, 1, 1))
+    # alice3 = alice2._replace(hire_date=alice.hire_date)
+    # alice2 = {**alice, "hire_date": date(2010, 1, 1)}
+    # alice3 = alice2 | {"hire_date": alice["hire_date"]}
 
     print(alice)
     print(alice2)
@@ -20,6 +24,8 @@ def main():
     print(alice == alice2)
     print(alice == alice3)
     print(alice < alice2)
+
+    # print(DetailEmployee(**alice.__dict__, favorites={}))
 
 
 @dataclass(frozen=True, order=True)
@@ -38,18 +44,6 @@ class Employee:
 @dataclass(frozen=True, order=True)
 class DetailEmployee(Employee):
     favorites: Mapping[str, str] = field(default_factory=dict)
-
-
-class EmployeeTuple(NamedTuple):
-    url: str
-    timeout_seconds: Optional[float] = None
-
-    def scheme(self):
-        return self.url[0:self.url.index(":")]
-
-
-class DetailEmployeeTuple(EmployeeTuple):
-    favorites: Mapping[str, str]
 
 
 main()
