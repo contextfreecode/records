@@ -11,11 +11,6 @@ import static java.util.Map.entry;
 
 class Records {
     public static void main(String[] args) {
-        // exploreRecords();
-        exploreMaps();
-    }
-
-    static void exploreRecords() {
         var alice = new Employee("Alice", LocalDate.of(2000, 1, 1));
         var alice2 = new Employee(
             alice.name(), alice.hireDate().withYear(2010)
@@ -27,40 +22,13 @@ class Records {
         out.println(alice3.hashCode());
         out.println(alice.equals(alice2));
         out.println(alice.equals(alice3));
-    }
-
-    static void exploreMaps() {
-        var favorites = new HashMap<>(Map.ofEntries(
-            entry("food", "apple"),
-            entry("color", "aqua")
-        ));
-        var favorites2 = new HashMap<>(favorites);
-        favorites2.put("food", "avocado");
-        // var favorites2 = ((Supplier<Map<String, String>>)() -> {
-        //     var result = new HashMap<>(favorites);
-        //     result.put("food", "avocado");
-        //     return result;
-        // }).get();
-        var favorites3 = Stream
-            .of(favorites2, Map.ofEntries(entry("food", favorites.get("food"))))
-            .flatMap(map -> map.entrySet().stream())
-            .collect(Collectors.toMap(
-                Entry::getKey, Entry::getValue,
-                (oldValue, newValue) -> newValue
-            ));
-        out.println(favorites);
-        out.println(favorites2);
-        out.println(favorites3);
-        out.println(favorites.hashCode());
-        out.println(favorites2.hashCode());
-        out.println(favorites3.hashCode());
-        out.println(favorites.equals(favorites2));
-        out.println(favorites.equals(favorites3));
-        out.println(favorites == favorites3);
+        out.println(Employee.class.getSuperclass());
     }
 }
 
-record Employee(String name, LocalDate hireDate, Map<String, String> favorites) {
+record Employee(
+    String name, LocalDate hireDate, Map<String, String> favorites
+) {
     Employee {
         if (name == null) throw new RuntimeException("No name"); 
         if (hireDate == null) throw new RuntimeException("No hireDate"); 

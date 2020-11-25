@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-// using System.Text.Json;
 using static System.Console;
 
 #pragma warning disable CS0162, CS8321
@@ -10,31 +9,16 @@ void LoadTest() {
     if (false) {
         var structs = new EmployeeStruct[count];
         for (int i = 0; i < structs.Length; i += 1) {
-            structs[i] = new EmployeeStruct { Name = "Bob" };
+            structs[i] = new EmployeeStruct { Name = "Betty" };
         }
     } else {
         var records = new Employee[count];
         for (int i = 0; i < records.Length; i += 1) {
-            records[i] = new Employee { Name = "Bob" };
+            records[i] = new Employee { Name = "Betty" };
         }
     }
     WriteLine("Done!");
     ReadLine();
-}
-
-void ExploreMaps() {
-    var favorites = new Dictionary<string, string> {
-        {"color", "aqua"},
-        {"food", "apple"},
-    }.ToImmutableDictionary();
-    var favorites2 = favorites.SetItem("food", "avocado");
-    var favorites3 = favorites2.SetItem("food", "apple");
-    WriteLine(favorites.GetHashCode());
-    WriteLine(favorites2.GetHashCode());
-    WriteLine(favorites3.GetHashCode());
-    WriteLine(favorites == favorites2);
-    WriteLine(favorites == favorites3);
-    // WriteLine(favorites < favorites2);
 }
 
 void ExploreRecords() {
@@ -44,10 +28,12 @@ void ExploreRecords() {
         HireDate = new (2000, 1, 1),
         // HireDate = new DateTime(2000, 1, 1),
     };
-    alice.Validate();
+    // alice.Validate();
+    // alice.Name = "Betty";
     WriteLine(alice);
     WriteLine(alice.YearsEmployed());
     WriteLine(alice.GetHashCode());
+    // WriteLine(typeof(Employee).BaseType);
 
     var alice2 = alice with { HireDate = new (2010, 1, 1) };
     var alice3 = alice2 with { HireDate = alice.HireDate };
@@ -60,13 +46,12 @@ void ExploreRecords() {
 
     var greetings = new Dictionary<Employee, String> {
         {alice, "Hi!"},
-    }.ToImmutableDictionary();
+    };
     WriteLine(greetings[alice3]);
 }
 #pragma warning restore CS0162, CS8321
 
 ExploreRecords();
-// ExploreMaps();
 // LoadTest();
 
 // record Employee(string Name, DateTime HireDate);
@@ -75,9 +60,9 @@ record Employee(
     DateTime HireDate = default
     // Box<DateTime>? HireDate = default
 ) {
-    public string Name { get; init; } = Name!;
-    public DateTime HireDate { get; init; } = HireDate;
-    // public Box<DateTime> HireDate { get; init; } = HireDate!;
+    // public string Name { get; init; } = Name!;
+    // public DateTime HireDate { get; init; } = HireDate;
+    // // public Box<DateTime> HireDate { get; init; } = HireDate!;
 
     public void Validate() {
         if (Name is null) throw new ArgumentException("Name missing");
@@ -93,15 +78,15 @@ record Employee(
 record DetailEmployee(
     string? Name = default,
     DateTime HireDate = default,
-    IReadOnlyDictionary<string, string>? favorites = default
+    IReadOnlyDictionary<string, string>? Favorites = default
 ) : Employee(Name, HireDate) {
-    public IReadOnlyDictionary<string, string>? Headers { get; init; } =
-        favorites ?? ImmutableDictionary.Create<string, string>();
+    public IReadOnlyDictionary<string, string>? Favorites { get; init; } =
+        Favorites ?? ImmutableDictionary.Create<string, string>();
 }
 
 struct EmployeeStruct {
-    public string Name { get; set; }
-    public DateTime HireDate { get; set; }
+    public string Name { get; init; }
+    public DateTime HireDate { get; init; }
 }
 
 record Box<ValueType>(ValueType Value) where ValueType : struct {

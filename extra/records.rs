@@ -26,9 +26,9 @@ fn main() {
     dbg!(alice == alice3);
     dbg!(alice < alice2);
     // Mutable
-    let mut bob = Employee { ..alice3 };
-    bob.name = "Bob";
-    dbg!(bob);
+    let mut betty = Employee { ..alice3 };
+    betty.name = "Betty";
+    dbg!(betty);
     // Hash core
     let favorites: BTreeMap<&str, &str> =
         vec![("food", "apple"), ("color", "aqua")]
