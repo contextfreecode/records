@@ -1,13 +1,7 @@
-// java --enable-preview --source 15 Records.java
-
 import java.time.*;
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.*;
-import java.util.stream.*;
 
 import static java.lang.System.out;
-import static java.util.Map.entry;
 
 class Records {
     public static void main(String[] args) {
@@ -33,13 +27,10 @@ class Records {
     }
 }
 
-record Employee(
-    String name, LocalDate hireDate, Map<String, String> favorites
-) {
+record Employee(String name, LocalDate hireDate, String color) {
     Employee {
         if (name == null) throw new RuntimeException("No name"); 
         if (hireDate == null) throw new RuntimeException("No hireDate"); 
-        if (favorites == null) favorites = Collections.emptyMap();
     }
 
     Employee(String name, LocalDate hireDate) {
@@ -51,4 +42,4 @@ record Employee(
     }
 }
 
-record DetailEmployee(Employee employee, Map<String, String> favorites) {}
+record DetailEmployee(Employee employee, String color) {}

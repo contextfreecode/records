@@ -1,24 +1,19 @@
 use chrono::prelude::*;
 use std::collections::hash_map::DefaultHasher;
-use std::collections::BTreeMap;
 use std::hash::*;
 
 fn main() {
     let alice = Employee {
-        name: "Alice",
-        hire_date: Utc.ymd(2000, 1, 1),
+        name: "Alice", hire_date: Utc.ymd(2000, 1, 1),
     };
     let alice2 = Employee {
-        hire_date: Utc.ymd(2010, 1, 1),
-        ..alice
+        hire_date: Utc.ymd(2010, 1, 1), ..alice
     };
     let alice3 = Employee {
-        hire_date: alice.hire_date,
-        ..alice2
+        hire_date: alice.hire_date, ..alice2
     };
 
     dbg!(&alice);
-    dbg!(alice.years_employed());
     dbg!(&alice2);
     dbg!(&alice3);
 
@@ -40,13 +35,13 @@ fn main() {
 // struct EmployeeTuple<'a>(&'a str, Date<Utc>);
 
 #[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct Employee<'a> {
+pub struct Employee<'a> {
     name: &'a str,
     hire_date: Date<Utc>,
 }
 
 impl<'a> Employee<'a> {
-    fn years_employed(&self) -> i32 {
+    pub fn years_employed(&self) -> i32 {
         Utc::today().year() - self.hire_date.year()
     }
 }
@@ -54,7 +49,7 @@ impl<'a> Employee<'a> {
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 struct DetailEmployee<'a> {
     employee: Employee<'a>,
-    favorites: BTreeMap<&'a str, &'a str>,
+    color: &'a str,
 }
 
 fn hash_calc<Hashable: Hash>(hashable: &Hashable) -> u64 {

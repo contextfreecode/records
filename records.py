@@ -1,6 +1,6 @@
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, replace
 from datetime import date
-from typing import Mapping, NamedTuple, Optional, TypedDict
+from typing import NamedTuple, TypedDict
 
 
 def main():
@@ -25,8 +25,6 @@ def main():
     print(alice == alice3)
     print(alice < alice2)
 
-    # print(DetailEmployee(**alice.__dict__, favorites={}))
-
 
 @dataclass(frozen=True, order=True)
 class Employee:
@@ -43,7 +41,7 @@ class Employee:
 
 @dataclass(frozen=True, order=True)
 class DetailEmployee(Employee):
-    favorites: Mapping[str, str] = field(default_factory=dict)
+    color: str
 
 
 main()
