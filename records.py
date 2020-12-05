@@ -12,6 +12,7 @@ def main():
     # alice3 = alice2._replace(hire_date=alice.hire_date)
     # alice2 = {**alice, "hire_date": date(2010, 1, 1)}
     # alice3 = alice2 | {"hire_date": alice["hire_date"]}
+    # alice3 = dict(alice2, hire_date=alice["hire_date"])
 
     print(alice)
     print(alice2)
