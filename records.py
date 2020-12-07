@@ -45,4 +45,5 @@ class DetailEmployee(Employee):
     color: str
 
 
-main()
+if __name__ == "__main__":
+    main()
